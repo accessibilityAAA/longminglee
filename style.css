@@ -1,0 +1,519 @@
+/* ==========================================================================
+   新式農民曆 - 旗艦樣式表 (style.css)
+   ========================================================================== */
+
+:root {
+  --bg-main: #F4F1EA;
+  --card-bg: #FFFFFF;
+  --text-main: #1F2937;
+  --text-sub: #4B5563;
+  --primary-red: #991B1B;
+  --primary-red-hover: #7F1D1D;
+  --border-color: #E5E7EB;
+  --focus-ring: #D97706;
+
+  --yi-bg: #ECFDF5;
+  --yi-border: #A7F3D0;
+  --yi-text: #065F46;
+  --yi-badge: #059669;
+
+  --ji-bg: #FFF1F2;
+  --ji-border: #FECDD3;
+  --ji-text: #9F1239;
+  --ji-badge: #E11D48;
+}
+
+body.dark-mode {
+  --bg-main: #0F172A;
+  --card-bg: #1E293B;
+  --text-main: #F9FAFB;
+  --text-sub: #9CA3AF;
+  --primary-red: #B91C1C;
+  --border-color: #334155;
+  --yi-bg: #064E3B;
+  --yi-border: #059669;
+  --yi-text: #ECFDF5;
+  --ji-bg: #881337;
+  --ji-border: #F43F5E;
+  --ji-text: #FFF1F2;
+}
+
+body.large-mode {
+  font-size: 1.25rem !important;
+}
+body.large-mode .tear-date-num {
+  font-size: 8.5rem !important;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+/* Skip Link */
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 10px;
+  background: var(--primary-red);
+  color: #FFF;
+  padding: 10px 18px;
+  font-weight: bold;
+  border-radius: 0 0 8px 8px;
+  z-index: 9999;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 0; }
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring) !important;
+  outline-offset: 2px !important;
+}
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); border: 0;
+}
+
+/* 頂部 Header */
+.site-header {
+  background: var(--primary-red);
+  color: #FFF;
+  padding: 0.6rem 1.25rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.brand-group { display: flex; align-items: center; flex-shrink: 0; }
+.brand-link { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #FFF; }
+.brand-logo { font-size: 1.6rem; }
+.brand-title { font-size: 1.35rem; font-weight: 800; letter-spacing: 0.03em; }
+
+.header-search-box {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+  max-width: 500px;
+}
+
+.header-search-icon {
+  position: absolute; left: 0.85rem; top: 50%;
+  transform: translateY(-50%); font-size: 0.95rem; color: #6B7280;
+}
+
+.header-search-input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.4rem;
+  border-radius: 9999px;
+  border: none;
+  font-size: 0.95rem;
+  outline: none;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1F2937;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.header-search-input:focus {
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4);
+}
+
+.header-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+
+.btn-head {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFF;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 0.88rem;
+  cursor: pointer;
+  min-height: 40px;
+}
+
+.btn-head:hover { background: rgba(255, 255, 255, 0.25); }
+.btn-head.primary { background: #F59E0B; color: #78350F; border-color: #F59E0B; }
+
+@media (max-width: 768px) {
+  .header-inner { gap: 0.75rem; }
+  .header-search-box {
+    order: 3;
+    max-width: 100%;
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
+/* 頂部熱門擇日與醒目按鈕列 */
+.quick-bar {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+}
+
+.quick-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.quick-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.kw-label {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.quick-keywords { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+.kw-btn {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.4rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.kw-btn:hover {
+  background: var(--primary-red);
+  color: #FFF;
+  border-color: var(--primary-red);
+}
+
+.quick-right-tools {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.btn-highlight {
+  border: none;
+  padding: 0.65rem 1.35rem;
+  border-radius: 0.6rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 46px;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-highlight.gold {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+  border: 1px solid #FBBF24;
+}
+
+.btn-highlight.gold:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5);
+  background: linear-gradient(135deg, #FBBF24 0%, #B45309 100%);
+}
+
+.btn-highlight.green {
+  background: linear-gradient(135deg, #10B981 0%, #047857 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(4, 120, 87, 0.35);
+  border: 1px solid #34D399;
+}
+
+.btn-highlight.green:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(4, 120, 87, 0.5);
+  background: linear-gradient(135deg, #34D399 0%, #065F46 100%);
+}
+
+/* 容器與日期選擇區 */
+.container { max-width: 1400px; margin: 1rem auto; padding: 0 1rem; }
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+}
+
+.control-card { margin-bottom: 1rem; }
+
+.date-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.date-picker-wrap { display: flex; gap: 0.5rem; align-items: center; }
+
+.date-picker {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--primary-red);
+  background: var(--card-bg);
+  color: var(--primary-red);
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+  min-height: 44px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.btn-today, .btn-date-nav {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.btn-today:hover, .btn-date-nav:hover { background: var(--border-color); }
+
+/* Flatpickr 美化 */
+.flatpickr-calendar {
+  font-size: 1.15rem !important;
+  width: 340px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.flatpickr-day {
+  height: 42px !important;
+  line-height: 42px !important;
+  font-weight: bold !important;
+  border-radius: 8px !important;
+}
+
+.flatpickr-day.selected {
+  background: var(--primary-red) !important;
+  border-color: var(--primary-red) !important;
+}
+
+.flatpickr-current-month {
+  font-size: 1.2rem !important;
+  font-weight: bold !important;
+}
+
+/* 三欄式儀表板 */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr 280px;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.calendar-card {
+  text-align: center;
+  border-top: 6px solid var(--primary-red);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  color: var(--text-sub);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.6rem;
+  font-size: 1rem;
+}
+
+.week-badge {
+  background: var(--primary-red);
+  color: #FFF;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.3rem;
+  font-size: 0.88rem;
+}
+
+.tear-date-num {
+  font-size: 6.8rem;
+  font-weight: 900;
+  color: var(--primary-red);
+  line-height: 1;
+  margin: 0.2rem 0;
+  letter-spacing: -0.02em;
+}
+
+.lunar-main-title { font-size: 1.3rem; font-weight: 800; color: var(--text-main); }
+.ganzhi-sub-title { font-size: 0.95rem; font-weight: 600; color: var(--text-sub); margin-top: 0.3rem; }
+
+.chongsha-box {
+  margin-top: 1rem;
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 4px solid var(--primary-red);
+  padding: 0.75rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+/* 宜忌雙欄 */
+.yiji-card-group { display: flex; flex-direction: column; gap: 1rem; }
+.card-yi { background: var(--yi-bg); border-color: var(--yi-border); flex: 1; }
+.card-ji { background: var(--ji-bg); border-color: var(--ji-border); flex: 1; }
+
+.yiji-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.85rem; }
+.yiji-header h2 { font-size: 1.2rem; font-weight: 800; letter-spacing: 0.02em; }
+
+.badge-circle {
+  width: 2.2rem; height: 2.2rem; border-radius: 9999px; color: #FFF;
+  font-size: 1.1rem; font-weight: bold; display: flex; align-items: center; justify-content: center;
+}
+.badge-circle.yi { background: var(--yi-badge); }
+.badge-circle.ji { background: var(--ji-badge); }
+
+.tag-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.tag-badge {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 0.98rem;
+  cursor: pointer;
+}
+
+/* 吉神方位 */
+.panel-title {
+  font-size: 1.1rem; font-weight: 800; margin-bottom: 0.85rem;
+  border-bottom: 2px solid var(--primary-red); padding-bottom: 0.4rem;
+}
+
+.god-list { display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.92rem; }
+.god-row { display: flex; justify-content: space-between; background: var(--bg-main); padding: 0.45rem 0.75rem; border-radius: 0.4rem; }
+
+.pengzu-box {
+  margin-top: 1rem; background: var(--bg-main); padding: 0.75rem;
+  border-radius: 0.5rem; font-size: 0.88rem; line-height: 1.5;
+}
+
+/* 12 時辰區域 */
+.hour-section { margin-bottom: 1rem; }
+.hours-container { display: flex; gap: 0.65rem; overflow-x: auto; padding-bottom: 0.4rem; }
+.hour-box { flex: none; width: 6.8rem; padding: 0.85rem; border-radius: 0.65rem; text-align: center; border: 1px solid var(--border-color); background: var(--bg-main); }
+.hour-box.lucky { background: var(--yi-bg); border-color: var(--yi-border); }
+.hour-title { font-size: 0.95rem; font-weight: bold; }
+.hour-range { font-size: 0.75rem; color: var(--text-sub); }
+.hour-status { font-size: 1.4rem; font-weight: 900; margin-top: 0.2rem; }
+.hour-box.lucky .hour-status { color: var(--yi-badge); }
+
+/* --------------------------------------------------------------------------
+   真實新月形紅木聖筊展示區（高度與間距壓縮）
+   -------------------------------------------------------------------------- */
+.bwa-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin: 0.5rem 0;
+  min-height: 90px;
+  perspective: 600px;
+}
+
+.bwa-svg {
+  display: block;
+  filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.bwa-tossing {
+  animation: toss3D 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes toss3D {
+  0% { transform: translateY(0) rotateX(0deg) rotateY(0deg) scale(1); }
+  50% { transform: translateY(-40px) rotateX(360deg) rotateY(180deg) scale(1.15); }
+  100% { transform: translateY(-10px) rotateX(720deg) rotateY(360deg) scale(0.95); }
+}
+
+/* 彈窗規格縮窄（無捲軸完美配置） */
+.custom-modal {
+  border-radius: 1rem;
+  border: 1px solid var(--border-color);
+  padding: 1rem 1.25rem;
+  width: 90%;
+  max-width: 500px; /* 從 680px 縮窄為 500px，不拉太寬 */
+  max-height: 85vh; /* 控制總高度，避免捲軸 */
+  overflow: hidden; /* 強制不產生捲軸 */
+  margin: auto;
+  background: var(--card-bg);
+  color: var(--text-main);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+}
+
+.custom-modal::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
+.modal-title { font-size: 1.15rem; color: var(--primary-red); margin-bottom: 0.35rem; font-weight: 800; }
+.modal-desc { font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.75rem; }
+
+.btn-modal-close {
+  width: 100%; background: var(--primary-red); color: #FFF;
+  border: none; padding: 0.5rem; border-radius: 0.5rem;
+  font-weight: bold; cursor: pointer; font-size: 0.95rem; min-height: 38px;
+  margin-top: 0.5rem;
+}
+
+/* Footer */
+.site-footer {
+  background: #0F172A; color: #9CA3AF; text-align: center;
+  padding: 1.75rem 1rem; margin-top: 2.5rem; border-top: 1px solid var(--border-color);
+}
+.footer-nav { margin-bottom: 0.65rem; }
+.footer-nav a { color: #E2E8F0; text-decoration: none; margin: 0 0.5rem; }
+.footer-nav a:hover { text-decoration: underline; color: #FDE68A; }
+.footer-copy { font-size: 0.8rem; color: #6B7280; }
+
+@media (max-width: 1100px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新式農民曆｜線上萬年曆與吉日查詢</title>
+  
+  <meta name="description" content="新式農民曆簡易閱讀版，提供今日農曆、萬年曆查詢、智慧擇日搜尋、12時辰吉凶與生肖沖煞，符合無障礙規範。">
+  <meta name="keywords" content="農民曆,黃曆,萬年曆,宜忌,智慧擇日,沖煞,12時辰">
+  <meta name="theme-color" content="#991b1b">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- 引入 Flatpickr 萬年曆套件樣式 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_red.css">
+
+  <script src="lunar.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh-tw.js"></script>
+
+  <script src="js/components.js" defer></script>
+  <script src="js/search.js" defer></script>
+</head>
+<body id="app-body">
+
+  <a href="#main-content" class="skip-link">跳過導覽選單，直接進入主要內容區</a>
+
+  <div id="global-header"></div>
+
+  <!-- 熱門擇日與核心工具大按鈕列 (已將擲筊與節氣拉上來，超顯眼配置) -->
+  <section class="quick-bar" aria-label="熱門擇日與民俗工具">
+    <div class="quick-inner">
+      <div class="quick-left">
+        <span class="kw-label">🔥 熱門擇日：</span>
+        <div class="quick-keywords">
+          <button type="button" class="kw-btn" onclick="quickSearch('結婚')">💍 結婚</button>
+          <button type="button" class="kw-btn" onclick="quickSearch('搬家')">🚛 搬家</button>
+          <button type="button" class="kw-btn" onclick="quickSearch('開幕')">💼 開業</button>
+          <button type="button" class="kw-btn" onclick="quickSearch('安床')">🛏️ 安床</button>
+          <button type="button" class="kw-btn" onclick="quickSearch('拜拜')">🙏 祈福</button>
+        </div>
+      </div>
+
+      <!-- 右側：顯眼兩大醒目功能按鈕 -->
+      <div class="quick-right-tools">
+        <button type="button" class="btn-highlight gold" onclick="openModal('線上擲筊求籤')">
+          🪙 線上誠心擲筊求籤 ➔
+        </button>
+        <button type="button" class="btn-highlight green" onclick="openModal('節氣養生')">
+          🌿 節氣養生指南 ➔
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 全站即時搜尋結果展現區 -->
+  <div id="search-results-overlay" class="search-overlay" aria-live="polite" style="display:none;">
+    <div class="container">
+      <div class="card search-card">
+        <div id="search-result-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要內容區 -->
+  <main id="main-content" class="container" role="main" tabindex="-1">
+    
+    <a href="javascript:void(0)" id="accesskey-C" accesskey="C" class="visually-hidden" title="主要內容區定位點 [Alt+C]">:::主要內容區定位點</a>
+
+    <!-- 日期選擇控制列 -->
+    <div class="card control-card">
+      <div class="date-controls">
+        <button type="button" class="btn-date-nav" onclick="changeDate(-1)" aria-label="切換至前一天">❮ 上一天</button>
+        
+        <div class="date-picker-wrap">
+          <label for="almanac-date-picker" class="visually-hidden">選擇查詢日期</label>
+          <input type="text" id="almanac-date-picker" class="date-picker" readonly placeholder="選擇日期 📅">
+          <button type="button" class="btn-today" onclick="goToday()">回到今天</button>
+        </div>
+
+        <button type="button" class="btn-date-nav" onclick="changeDate(1)" aria-label="切換至後一天">後一天 ❯</button>
+      </div>
+    </div>
+
+    <!-- 儀表板三欄核心區域 -->
+    <div class="dashboard-grid">
+
+      <!-- 左欄：今日撕曆卡 -->
+      <section class="calendar-card card" aria-label="今日日期">
+        <div class="calendar-header">
+          <span id="display-solar-year-month">2026 年 09 月</span>
+          <span id="display-week-day" class="week-badge">星期三</span>
+        </div>
+        <div id="display-big-day" class="tear-date-num">16</div>
+        <div id="display-lunar-date" class="lunar-main-title">農曆 八月初六 · 白露</div>
+        <div id="display-ganzhi-year" class="ganzhi-sub-title">丙午 (馬) 年 · 丁酉月 · 癸巳日</div>
+
+        <div id="display-chong-sha" class="chongsha-box">
+          <strong>⚡ 生肖沖煞：</strong> 沖豬(丁亥)，煞東方。屬豬者諸事宜謹慎。
+        </div>
+      </section>
+
+      <!-- 中欄：宜忌雙欄 -->
+      <section class="yiji-card-group" aria-label="今日宜忌">
+        <div class="card card-yi">
+          <div class="yiji-header">
+            <span class="badge-circle yi">宜</span>
+            <h2>適合進行的事項</h2>
+          </div>
+          <div id="display-yi-tags" class="tag-grid"></div>
+        </div>
+
+        <div class="card card-ji">
+          <div class="yiji-header">
+            <span class="badge-circle ji">忌</span>
+            <h2>應避免的事項</h2>
+          </div>
+          <div id="display-ji-tags" class="tag-grid"></div>
+        </div>
+      </section>
+
+      <!-- 右欄：吉神方位與彭祖百忌 -->
+      <section class="god-card card" aria-label="吉神方位">
+        <h2 class="panel-title">🧭 今日吉神方位</h2>
+        <div class="god-list">
+          <div class="god-row"><span>喜神方位：</span><strong id="pos-xi">艮 (東北)</strong></div>
+          <div class="god-row"><span>福神方位：</span><strong id="pos-fu">巽 (東南)</strong></div>
+          <div class="god-row"><span>財神方位：</span><strong id="pos-cai">坤 (西南)</strong></div>
+          <div class="god-row"><span>陽貴神位：</span><strong id="pos-yanggui">坤 (西南)</strong></div>
+          <div class="god-row"><span>陰貴神位：</span><strong id="pos-yingui">坎 (正北)</strong></div>
+        </div>
+        <div class="pengzu-box">
+          <strong>📜 彭祖百忌：</strong>
+          <p id="display-pengzu">癸不詞訟理弱敵強，巳不遠行財物伏藏。</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 12 時辰吉凶速覽 -->
+    <section class="card hour-section" aria-label="12時辰吉凶">
+      <h2 class="panel-title">⏰ 今日 12 時辰吉凶速覽（可左右滑動查看）</h2>
+      <div id="display-hours-stream" class="hours-container"></div>
+    </section>
+
+  </main>
+
+  <div id="global-footer"></div>
+
+  <script>
+    let currentDate = new Date();
+    let fpPicker = null;
+
+    document.addEventListener("DOMContentLoaded", function () {
+      initFlatpickr();
+      initAlmanac();
+    });
+
+    function initFlatpickr() {
+      fpPicker = flatpickr("#almanac-date-picker", {
+        locale: "zh_tw",
+        dateFormat: "Y / m / d 📅",
+        defaultDate: currentDate,
+        disableMobile: "true",
+        onChange: function(selectedDates, dateStr, instance) {
+          if (selectedDates.length > 0) {
+            currentDate = selectedDates[0];
+            renderAlmanac(currentDate);
+          }
+        }
+      });
+    }
+
+    function initAlmanac() {
+      updateDateInput();
+      renderAlmanac(currentDate);
+    }
+
+    function updateDateInput() {
+      if (fpPicker) {
+        fpPicker.setDate(currentDate, false);
+      }
+    }
+
+    function changeDate(offsetDays) {
+      currentDate.setDate(currentDate.getDate() + offsetDays);
+      updateDateInput();
+      renderAlmanac(currentDate);
+    }
+
+    function goToday() {
+      currentDate = new Date();
+      updateDateInput();
+      renderAlmanac(currentDate);
+    }
+
+    function onDateSelected(val) {
+      if (!val) return;
+      currentDate = new Date(val);
+      renderAlmanac(currentDate);
+    }
+
+    function renderAlmanac(dateObj) {
+      if (typeof Solar === 'undefined') return;
+
+      const solar = Solar.fromDate(dateObj);
+      const lunar = solar.getLunar();
+
+      const weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+      
+      document.getElementById('display-solar-year-month').innerText = `${solar.getYear()} 年 ${String(solar.getMonth()).padStart(2, '0')} 月`;
+      document.getElementById('display-week-day').innerText = weeks[dateObj.getDay()];
+      document.getElementById('display-big-day').innerText = solar.getDay();
+      document.getElementById('display-lunar-date').innerText = `農曆 ${lunar.getMonthInChinese()}月${lunar.getDayInChinese()} · 節氣【${lunar.getJieQi() || '無'}】`;
+      document.getElementById('display-ganzhi-year').innerText = `${lunar.getYearInGanZhi()}(${lunar.getYearShengXiao()})年 · ${lunar.getMonthInChinese()}月 · ${lunar.getDayInChinese()}`;
+
+      document.getElementById('display-chong-sha').innerHTML = `<strong>⚡ 生肖沖煞：</strong> 沖${lunar.getChongDesc()}，煞${lunar.getSha()}方。`;
+
+      renderTags('display-yi-tags', lunar.getDayYi(), true);
+      renderTags('display-ji-tags', lunar.getDayJi(), false);
+
+      renderHoursStream();
+    }
+
+    function renderTags(containerId, list, isYi) {
+      const box = document.getElementById(containerId);
+      if (!box) return;
+      box.innerHTML = '';
+
+      if (!list || list.length === 0) {
+        box.innerHTML = '<span class="empty-tag">諸事不宜 / 無特殊禁忌</span>';
+        return;
+      }
+
+      list.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `tag-badge ${isYi ? 'yi' : 'ji'}`;
+        btn.innerHTML = `${item} ℹ️`;
+        btn.onclick = () => openModal(item);
+        box.appendChild(btn);
+      });
+    }
+
+    function renderHoursStream() {
+      const stream = document.getElementById('display-hours-stream');
+      if (!stream) return;
+      stream.innerHTML = '';
+
+      const hours = [
+        { t: '子時', h: '23-01' }, { t: '丑時', h: '01-03' }, { t: '寅時', h: '03-05' },
+        { t: '卯時', h: '05-07' }, { t: '辰時', h: '07-09' }, { t: '巳時', h: '09-11' },
+        { t: '午時', h: '11-13' }, { t: '未時', h: '13-15' }, { t: '申時', h: '15-17' },
+        { t: '酉時', h: '17-19' }, { t: '戌時', h: '19-21' }, { t: '亥時', h: '21-23' }
+      ];
+      
+      hours.forEach((item, idx) => {
+        const isLucky = (idx % 2 === 0);
+        const div = document.createElement('div');
+        div.className = `hour-box ${isLucky ? 'lucky' : 'unlucky'}`;
+        div.innerHTML = `
+          <div class="hour-title">${item.t}</div>
+          <div class="hour-range">${item.h}</div>
+          <div class="hour-status">${isLucky ? '吉' : '凶'}</div>
+        `;
+        stream.appendChild(div);
+      });
+    }
+
+    function speakTodayAlmanac() {
+      if (!('speechSynthesis' in window)) {
+        alert('您的瀏覽器不支援語音朗讀。');
+        return;
+      }
+      const text = document.getElementById('display-solar-year-month').innerText + ' ' +
+                   document.getElementById('display-big-day').innerText + '號，' +
+                   document.getElementById('display-lunar-date').innerText + '。' +
+                   document.getElementById('display-chong-sha').innerText;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-TW';
+      window.speechSynthesis.speak(u);
+    }
+  </script>
+</body>
+</html>
