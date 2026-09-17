@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://accessibilityaaa.github.io/longminglee/sitemap.xml

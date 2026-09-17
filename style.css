@@ -1,5 +1,6 @@
 /* ==========================================================================
-   新式農民曆 - 旗艦樣式表 (style.css)
+   新式農民曆 - 完整旗艦樣式表 (style.css)
+   含：深色護眼、大字體、WCAG無障礙、12時辰滿版、順暢滾動Modal與AdSense廣告位
    ========================================================================== */
 
 :root {
@@ -58,7 +59,7 @@ body {
   line-height: 1.6;
 }
 
-/* Skip Link */
+/* 無障礙：跳過導覽區塊 */
 .skip-link {
   position: absolute;
   top: -50px;
@@ -84,7 +85,9 @@ body {
   margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); border: 0;
 }
 
-/* 頂部 Header */
+/* --------------------------------------------------------------------------
+   頂部 Header 與 搜尋欄
+   -------------------------------------------------------------------------- */
 .site-header {
   background: var(--primary-red);
   color: #FFF;
@@ -105,7 +108,7 @@ body {
 .brand-group { display: flex; align-items: center; flex-shrink: 0; }
 .brand-link { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #FFF; }
 .brand-logo { font-size: 1.6rem; }
-.brand-title { font-size: 1.35rem; font-weight: 800; letter-spacing: 0.03em; }
+.brand-title { font-size: 1.35rem; font-weight: 800; letter-spacing: 0.03em; margin: 0; }
 
 .header-search-box {
   position: relative;
@@ -163,11 +166,13 @@ body {
   }
 }
 
-/* 頂部熱門擇日與醒目按鈕列 */
+/* --------------------------------------------------------------------------
+   熱門擇日快選區與重點按鈕列
+   -------------------------------------------------------------------------- */
 .quick-bar {
   background: var(--card-bg);
   border-bottom: 1px solid var(--border-color);
-  padding: 0.65rem 1.25rem;
+  padding: 0.75rem 1.25rem;
 }
 
 .quick-inner {
@@ -209,6 +214,7 @@ body {
   display: inline-flex;
   align-items: center;
   transition: all 0.2s;
+  text-decoration: none;
 }
 
 .kw-btn:hover {
@@ -264,7 +270,9 @@ body {
   background: linear-gradient(135deg, #34D399 0%, #065F46 100%);
 }
 
-/* 容器與日期選擇區 */
+/* --------------------------------------------------------------------------
+   主內容容器與日期切換控制列
+   -------------------------------------------------------------------------- */
 .container { max-width: 1400px; margin: 1rem auto; padding: 0 1rem; }
 
 .card {
@@ -310,11 +318,13 @@ body {
   font-weight: bold;
   cursor: pointer;
   min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .btn-today:hover, .btn-date-nav:hover { background: var(--border-color); }
 
-/* Flatpickr 美化 */
+/* Flatpickr 萬年曆套件客製化 */
 .flatpickr-calendar {
   font-size: 1.15rem !important;
   width: 340px !important;
@@ -340,7 +350,9 @@ body {
   font-weight: bold !important;
 }
 
-/* 三欄式儀表板 */
+/* --------------------------------------------------------------------------
+   儀表板三欄核心區域 (撕曆卡 / 宜忌 / 方位百忌)
+   -------------------------------------------------------------------------- */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 320px 1fr 280px;
@@ -403,7 +415,7 @@ body {
 .card-ji { background: var(--ji-bg); border-color: var(--ji-border); flex: 1; }
 
 .yiji-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.85rem; }
-.yiji-header h2 { font-size: 1.2rem; font-weight: 800; letter-spacing: 0.02em; }
+.yiji-header h2 { font-size: 1.2rem; font-weight: 800; letter-spacing: 0.02em; margin: 0; }
 
 .badge-circle {
   width: 2.2rem; height: 2.2rem; border-radius: 9999px; color: #FFF;
@@ -425,7 +437,46 @@ body {
   cursor: pointer;
 }
 
-/* 吉神方位 */
+/* --------------------------------------------------------------------------
+   Google AdSense 廣告卡位區
+   -------------------------------------------------------------------------- */
+.adsense-slot {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px dashed var(--border-color);
+  border-radius: 0.5rem;
+  text-align: center;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  min-height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.adsense-slot::before {
+  content: "贊助商廣告";
+  font-size: 0.75rem;
+  color: var(--text-sub);
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  opacity: 0.6;
+}
+
+.ads-in-yiji {
+  min-height: 100px;
+  margin: 0.25rem 0;
+}
+
+.ads-in-modal {
+  min-height: 80px;
+  margin-top: 0.5rem;
+}
+
+/* 方位與彭祖百忌 */
 .panel-title {
   font-size: 1.1rem; font-weight: 800; margin-bottom: 0.85rem;
   border-bottom: 2px solid var(--primary-red); padding-bottom: 0.4rem;
@@ -439,32 +490,65 @@ body {
   border-radius: 0.5rem; font-size: 0.88rem; line-height: 1.5;
 }
 
-/* 12 時辰區域 */
+/* --------------------------------------------------------------------------
+   12 時辰區域：桌機 12 欄滿版 ✕ 行動端滑動
+   -------------------------------------------------------------------------- */
 .hour-section { margin-bottom: 1rem; }
-.hours-container { display: flex; gap: 0.65rem; overflow-x: auto; padding-bottom: 0.4rem; }
-.hour-box { flex: none; width: 6.8rem; padding: 0.85rem; border-radius: 0.65rem; text-align: center; border: 1px solid var(--border-color); background: var(--bg-main); }
+
+.hours-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.hour-box {
+  width: 100%;
+  padding: 0.75rem 0.25rem;
+  border-radius: 0.65rem;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .hour-box.lucky { background: var(--yi-bg); border-color: var(--yi-border); }
 .hour-title { font-size: 0.95rem; font-weight: bold; }
 .hour-range { font-size: 0.75rem; color: var(--text-sub); }
 .hour-status { font-size: 1.4rem; font-weight: 900; margin-top: 0.2rem; }
 .hour-box.lucky .hour-status { color: var(--yi-badge); }
 
+@media (max-width: 1024px) {
+  .hours-container {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  
+  .hour-box {
+    flex: 0 0 6.5rem;
+    width: 6.5rem;
+  }
+}
+
 /* --------------------------------------------------------------------------
-   真實新月形紅木聖筊展示區（高度與間距壓縮）
+   聖筊動畫舞台與順暢滾動 Modal (寬度 720px)
    -------------------------------------------------------------------------- */
 .bwa-stage {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  margin: 0.5rem 0;
-  min-height: 90px;
+  gap: 2.2rem;
+  margin: 0.35rem 0;
+  min-height: 85px;
   perspective: 600px;
 }
 
 .bwa-svg {
   display: block;
-  filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.2));
   transition: transform 0.3s ease;
 }
 
@@ -474,41 +558,133 @@ body {
 
 @keyframes toss3D {
   0% { transform: translateY(0) rotateX(0deg) rotateY(0deg) scale(1); }
-  50% { transform: translateY(-40px) rotateX(360deg) rotateY(180deg) scale(1.15); }
-  100% { transform: translateY(-10px) rotateX(720deg) rotateY(360deg) scale(0.95); }
+  50% { transform: translateY(-38px) rotateX(360deg) rotateY(180deg) scale(1.12); }
+  100% { transform: translateY(-8px) rotateX(720deg) rotateY(360deg) scale(0.96); }
 }
 
-/* 彈窗規格縮窄（無捲軸完美配置） */
+/* 彈窗允許順暢單一滾動，絕不剪切按鈕 */
 .custom-modal {
-  border-radius: 1rem;
+  position: relative;
+  border-radius: 1.25rem;
   border: 1px solid var(--border-color);
-  padding: 1rem 1.25rem;
-  width: 90%;
-  max-width: 500px; /* 從 680px 縮窄為 500px，不拉太寬 */
-  max-height: 85vh; /* 控制總高度，避免捲軸 */
-  overflow: hidden; /* 強制不產生捲軸 */
+  padding: 1.25rem;
+  width: 92%;
+  max-width: 720px;
+  max-height: 88vh;
+  overflow-y: auto !important;
   margin: auto;
   background: var(--card-bg);
   color: var(--text-main);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.3);
 }
 
-.custom-modal::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
-.modal-title { font-size: 1.15rem; color: var(--primary-red); margin-bottom: 0.35rem; font-weight: 800; }
-.modal-desc { font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.75rem; }
+.custom-modal::backdrop {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.modal-title {
+  font-size: 1.35rem;
+  color: var(--primary-red);
+  margin-bottom: 0.6rem;
+  font-weight: 800;
+  border-bottom: 2px solid var(--primary-red);
+  padding-bottom: 0.5rem;
+}
+
+.modal-desc {
+  font-size: 0.98rem;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+/* 取消內部分層二重卷軸 */
+#slip-result {
+  max-height: none;
+  overflow: visible;
+  padding-right: 0;
+}
+
+/* 🌟 置頂金黃醒目卡片（神明靈感指引） */
+.highlight-insight-box {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FFFBEB 100%);
+  border: 2px solid #F59E0B;
+  border-radius: 0.6rem;
+  color: #78350F;
+  font-size: 0.98rem;
+  font-weight: bold;
+  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.15);
+  line-height: 1.6;
+}
+
+body.dark-mode .highlight-insight-box {
+  background: linear-gradient(135deg, #78350F 0%, #451A03 100%);
+  border-color: #F59E0B;
+  color: #FEF3C7;
+}
+
+/* 隱藏原生底層多餘按鈕 */
+#term-modal > .btn-modal-close {
+  display: none;
+}
 
 .btn-modal-close {
-  width: 100%; background: var(--primary-red); color: #FFF;
-  border: none; padding: 0.5rem; border-radius: 0.5rem;
-  font-weight: bold; cursor: pointer; font-size: 0.95rem; min-height: 38px;
-  margin-top: 0.5rem;
+  width: 100%;
+  background: var(--primary-red);
+  color: #FFF;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  min-height: 42px;
+  margin-top: 0.85rem;
+  transition: background 0.2s;
 }
 
-/* Footer */
-.site-footer {
-  background: #0F172A; color: #9CA3AF; text-align: center;
-  padding: 1.75rem 1rem; margin-top: 2.5rem; border-top: 1px solid var(--border-color);
+.btn-modal-close:hover {
+  background: var(--primary-red-hover);
 }
+
+/* Modal 右上角固定 ✕ 按鈕 */
+.btn-modal-x {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.85rem;
+  background: rgba(0, 0, 0, 0.06);
+  border: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--text-sub);
+  cursor: pointer;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 20;
+}
+
+.btn-modal-x:hover {
+  background: var(--primary-red);
+  color: #FFFFFF;
+}
+
+/* --------------------------------------------------------------------------
+   頁尾 Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+  background: #0F172A;
+  color: #9CA3AF;
+  text-align: center;
+  padding: 1.75rem 1rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
 .footer-nav { margin-bottom: 0.65rem; }
 .footer-nav a { color: #E2E8F0; text-decoration: none; margin: 0 0.5rem; }
 .footer-nav a:hover { text-decoration: underline; color: #FDE68A; }

@@ -23,6 +23,9 @@
 
   <script src="js/components.js" defer></script>
   <script src="js/search.js" defer></script>
+
+  <!-- Google AdSense SDK -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 </head>
 <body id="app-body">
 
@@ -30,26 +33,19 @@
 
   <div id="global-header"></div>
 
-  <!-- 熱門擇日與核心工具大按鈕列 (已將擲筊與節氣拉上來，超顯眼配置) -->
+  <!-- 熱門擇日與核心工具大按鈕列 -->
   <section class="quick-bar" aria-label="熱門擇日與民俗工具">
     <div class="quick-inner">
       <div class="quick-left">
-        <span class="kw-label">🔥 熱門擇日：</span>
-        <div class="quick-keywords">
-          <button type="button" class="kw-btn" onclick="quickSearch('結婚')">💍 結婚</button>
-          <button type="button" class="kw-btn" onclick="quickSearch('搬家')">🚛 搬家</button>
-          <button type="button" class="kw-btn" onclick="quickSearch('開幕')">💼 開業</button>
-          <button type="button" class="kw-btn" onclick="quickSearch('安床')">🛏️ 安床</button>
-          <button type="button" class="kw-btn" onclick="quickSearch('拜拜')">🙏 祈福</button>
-        </div>
+        <span class="kw-label" id="ui-label-hot">🔥 熱門擇日：</span>
+        <div class="quick-keywords" id="ui-box-hot-btns"></div>
       </div>
 
-      <!-- 右側：顯眼兩大醒目功能按鈕 -->
       <div class="quick-right-tools">
-        <button type="button" class="btn-highlight gold" onclick="openModal('線上擲筊求籤')">
+        <button type="button" class="btn-highlight gold" onclick="openModal('線上擲筊求籤')" id="ui-btn-divination">
           🪙 線上誠心擲筊求籤 ➔
         </button>
-        <button type="button" class="btn-highlight green" onclick="openModal('節氣養生')">
+        <button type="button" class="btn-highlight green" onclick="openModal('節氣養生')" id="ui-btn-jieqi">
           🌿 節氣養生指南 ➔
         </button>
       </div>
@@ -73,15 +69,15 @@
     <!-- 日期選擇控制列 -->
     <div class="card control-card">
       <div class="date-controls">
-        <button type="button" class="btn-date-nav" onclick="changeDate(-1)" aria-label="切換至前一天">❮ 上一天</button>
+        <button type="button" class="btn-date-nav" onclick="changeDate(-1)" aria-label="切換至前一天" id="ui-btn-prev">❮ 上一天</button>
         
         <div class="date-picker-wrap">
           <label for="almanac-date-picker" class="visually-hidden">選擇查詢日期</label>
           <input type="text" id="almanac-date-picker" class="date-picker" readonly placeholder="選擇日期 📅">
-          <button type="button" class="btn-today" onclick="goToday()">回到今天</button>
+          <button type="button" class="btn-today" onclick="goToday()" id="ui-btn-today">回到今天</button>
         </div>
 
-        <button type="button" class="btn-date-nav" onclick="changeDate(1)" aria-label="切換至後一天">後一天 ❯</button>
+        <button type="button" class="btn-date-nav" onclick="changeDate(1)" aria-label="切換至後一天" id="ui-btn-next">後一天 ❯</button>
       </div>
     </div>
 
@@ -92,9 +88,9 @@
       <section class="calendar-card card" aria-label="今日日期">
         <div class="calendar-header">
           <span id="display-solar-year-month">2026 年 09 月</span>
-          <span id="display-week-day" class="week-badge">星期三</span>
+          <span id="display-week-day" class="week-badge">星期四</span>
         </div>
-        <div id="display-big-day" class="tear-date-num">16</div>
+        <div id="display-big-day" class="tear-date-num">17</div>
         <div id="display-lunar-date" class="lunar-main-title">農曆 八月初六 · 白露</div>
         <div id="display-ganzhi-year" class="ganzhi-sub-title">丙午 (馬) 年 · 丁酉月 · 癸巳日</div>
 
@@ -107,16 +103,16 @@
       <section class="yiji-card-group" aria-label="今日宜忌">
         <div class="card card-yi">
           <div class="yiji-header">
-            <span class="badge-circle yi">宜</span>
-            <h2>適合進行的事項</h2>
+            <span class="badge-circle yi" id="ui-badge-yi">宜</span>
+            <h2 id="ui-title-yi">適合進行的事項</h2>
           </div>
           <div id="display-yi-tags" class="tag-grid"></div>
         </div>
 
         <div class="card card-ji">
           <div class="yiji-header">
-            <span class="badge-circle ji">忌</span>
-            <h2>應避免的事項</h2>
+            <span class="badge-circle ji" id="ui-badge-ji">忌</span>
+            <h2 id="ui-title-ji">應避免的事項</h2>
           </div>
           <div id="display-ji-tags" class="tag-grid"></div>
         </div>
@@ -124,16 +120,16 @@
 
       <!-- 右欄：吉神方位與彭祖百忌 -->
       <section class="god-card card" aria-label="吉神方位">
-        <h2 class="panel-title">🧭 今日吉神方位</h2>
+        <h2 class="panel-title" id="ui-title-gods">🧭 今日吉神方位</h2>
         <div class="god-list">
-          <div class="god-row"><span>喜神方位：</span><strong id="pos-xi">艮 (東北)</strong></div>
-          <div class="god-row"><span>福神方位：</span><strong id="pos-fu">巽 (東南)</strong></div>
-          <div class="god-row"><span>財神方位：</span><strong id="pos-cai">坤 (西南)</strong></div>
-          <div class="god-row"><span>陽貴神位：</span><strong id="pos-yanggui">坤 (西南)</strong></div>
-          <div class="god-row"><span>陰貴神位：</span><strong id="pos-yingui">坎 (正北)</strong></div>
+          <div class="god-row"><span id="ui-god-xi">喜神方位：</span><strong id="pos-xi">艮 (東北)</strong></div>
+          <div class="god-row"><span id="ui-god-fu">福神方位：</span><strong id="pos-fu">巽 (東南)</strong></div>
+          <div class="god-row"><span id="ui-god-cai">財神方位：</span><strong id="pos-cai">坤 (西南)</strong></div>
+          <div class="god-row"><span id="ui-god-yang">陽貴神位：</span><strong id="pos-yanggui">坤 (西南)</strong></div>
+          <div class="god-row"><span id="ui-god-yin">陰貴神位：</span><strong id="pos-yingui">坎 (正北)</strong></div>
         </div>
         <div class="pengzu-box">
-          <strong>📜 彭祖百忌：</strong>
+          <strong id="ui-title-pengzu">📜 彭祖百忌：</strong>
           <p id="display-pengzu">癸不詞訟理弱敵強，巳不遠行財物伏藏。</p>
         </div>
       </section>
@@ -142,7 +138,7 @@
 
     <!-- 12 時辰吉凶速覽 -->
     <section class="card hour-section" aria-label="12時辰吉凶">
-      <h2 class="panel-title">⏰ 今日 12 時辰吉凶速覽（可左右滑動查看）</h2>
+      <h2 class="panel-title" id="ui-title-hours">⏰ 今日 12 時辰吉凶速覽（可左右滑動查看）</h2>
       <div id="display-hours-stream" class="hours-container"></div>
     </section>
 
@@ -154,18 +150,115 @@
     let currentDate = new Date();
     let fpPicker = null;
 
+    // 1. 全站 UI 介面字典
+    const PAGE_I18N = {
+      'zh-TW': {
+        hotLabel: '🔥 熱門擇日：',
+        hotBtns: [
+          { k: '結婚', t: '💍 結婚' }, { k: '搬家', t: '🚛 搬家' },
+          { k: '開幕', t: '💼 開業' }, { k: '安床', t: '🛏️ 安床' }, { k: '拜拜', t: '🙏 祈福' }
+        ],
+        btnDivination: '🪙 線上誠心擲筊求籤 ➔',
+        btnJieqi: '🌿 節氣養生指南 ➔',
+        btnPrev: '❮ 上一天', btnNext: '後一天 ❯', btnToday: '回到今天',
+        badgeYi: '宜', badgeJi: '忌',
+        titleYi: '適合進行的事項', titleJi: '應避免的事項',
+        titleGods: '🧭 今日吉神方位',
+        godXi: '喜神方位：', godFu: '福神方位：', godCai: '財神方位：',
+        godYang: '陽貴神位：', godYin: '陰貴神位：',
+        titlePengzu: '📜 彭祖百忌：',
+        titleHours: '⏰ 今日 12 時辰吉凶速覽（可左右滑動查看）',
+        weeks: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+        lucky: '吉', unlucky: '凶',
+        lunarPrefix: '農曆', termPrefix: '節氣'
+      },
+      'zh-CN': {
+        hotLabel: '🔥 热门择日：',
+        hotBtns: [
+          { k: '结婚', t: '💍 结婚' }, { k: '搬家', t: '🚛 搬家' },
+          { k: '开幕', t: '💼 开业' }, { k: '安床', t: '🛏️ 安床' }, { k: '拜拜', t: '🙏 祈福' }
+        ],
+        btnDivination: '🪙 线上诚心掷筊求签 ➔',
+        btnJieqi: '🌿 节气养生指南 ➔',
+        btnPrev: '❮ 上一天', btnNext: '后一天 ❯', btnToday: '回到今天',
+        badgeYi: '宜', badgeJi: '忌',
+        titleYi: '适合进行的事项', titleJi: '应避免的事项',
+        titleGods: '🧭 今日吉神方位',
+        godXi: '喜神方位：', godFu: '福神方位：', godCai: '财神方位：',
+        godYang: '阳贵神位：', godYin: '阴贵神位：',
+        titlePengzu: '📜 彭祖百忌：',
+        titleHours: '⏰ 今日 12 时辰吉凶速览（可左右滑动查看）',
+        weeks: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+        lucky: '吉', unlucky: '凶',
+        lunarPrefix: '农历', termPrefix: '节气'
+      },
+      'en': {
+        hotLabel: '🔥 Popular Searches:',
+        hotBtns: [
+          { k: 'wedding', t: '💍 Wedding' }, { k: 'moving', t: '🚛 Moving' },
+          { k: 'opening', t: '💼 Opening' }, { k: 'pray', t: '🙏 Pray' }
+        ],
+        btnDivination: '🪙 Online Divination ➔',
+        btnJieqi: '🌿 Health Guide ➔',
+        btnPrev: '❮ Prev Day', btnNext: 'Next Day ❯', btnToday: 'Today',
+        badgeYi: 'Yi', badgeJi: 'Ji',
+        titleYi: 'Auspicious Activities (宜)', titleJi: 'Activities to Avoid (忌)',
+        titleGods: '🧭 Auspicious Directions',
+        godXi: 'Joy God: ', godFu: 'Fortune God: ', godCai: 'Wealth God: ',
+        godYang: 'Yang Noble: ', godYin: 'Yin Noble: ',
+        titlePengzu: '📜 Pengzu Taboos:',
+        titleHours: '⏰ 12 Hourly Fortune Stream',
+        weeks: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        lucky: 'Good', unlucky: 'Bad',
+        lunarPrefix: 'Lunar ', termPrefix: 'Term'
+      }
+    };
+
+    // 2. 方位對照翻譯字典
+    const POS_I18N = {
+      'zh-CN': {
+        '艮 (東北)': '艮 (东北)', '巽 (東南)': '巽 (东南)', '坤 (西南)': '坤 (西南)',
+        '坎 (正北)': '坎 (正北)', '離 (正南)': '离 (正南)', '震 (正東)': '震 (正东)',
+        '兌 (正西)': '兑 (正西)', '乾 (西北)': '乾 (西北)'
+      },
+      'en': {
+        '艮 (東北)': 'NE (Gen)', '巽 (東南)': 'SE (Xun)', '坤 (西南)': 'SW (Kun)',
+        '坎 (正北)': 'N (Kan)', '離 (正南)': 'S (Li)', '震 (正東)': 'E (Zhen)',
+        '兌 (正西)': 'W (Dui)', '乾 (西北)': 'NW (Qian)'
+      }
+    };
+
+    // 3. 宜忌標籤徹底覆蓋字典 (加入「裁種/栽種」等特例)
+    const TAG_I18N = {
+      'zh-CN': {
+        '開市': '开市', '交易': '交易', '立券': '立券', '納財': '纳财', '掛匾': '挂匾',
+        '裁種': '栽种', '栽種': '栽种', '祭祀': '祭祀', '祈福': '祈福', '開光': '开光', '拆卸': '拆卸',
+        '動土': '动土', '安床': '安床', '嫁娶': '嫁娶', '破土': '破土', '進人口': '进人口',
+        '出行': '出行', '入宅': '入宅', '移徙': '移徙', '出火': '出火', '納畜': '纳畜',
+        '詞訟': '词讼', '安葬': '安葬', '訂盟': '订盟', '納採': '纳采', '問名': '问名'
+      },
+      'en': {
+        '開市': 'Opening', '交易': 'Trading', '立券': 'Contracting', '納財': 'Wealth', '掛匾': 'Signboard',
+        '裁種': 'Planting', '栽種': 'Planting', '祭祀': 'Worship', '祈福': 'Praying', '開光': 'Blessing', '拆卸': 'Demolition',
+        '動土': 'Groundbreaking', '安床': 'Bed Setup', '嫁娶': 'Wedding', '破土': 'Burial Dig', '進人口': 'Adoption',
+        '出行': 'Travel', '入宅': 'Move-in', '移徙': 'Relocation', '出火': 'Fire Ceremony', '納畜': 'Livestock',
+        '詞訟': 'Litigation', '安葬': 'Funeral', '訂盟': 'Engagement', '納採': 'Betrothal', '問名': 'Proposal'
+      }
+    };
+
     document.addEventListener("DOMContentLoaded", function () {
       initFlatpickr();
       initAlmanac();
     });
 
     function initFlatpickr() {
+      const cLang = typeof currentLang !== 'undefined' ? currentLang : 'zh-TW';
       fpPicker = flatpickr("#almanac-date-picker", {
-        locale: "zh_tw",
+        locale: cLang === 'en' ? 'en' : (cLang === 'zh-CN' ? 'zh' : 'zh_tw'),
         dateFormat: "Y / m / d 📅",
         defaultDate: currentDate,
         disableMobile: "true",
-        onChange: function(selectedDates, dateStr, instance) {
+        onChange: function(selectedDates) {
           if (selectedDates.length > 0) {
             currentDate = selectedDates[0];
             renderAlmanac(currentDate);
@@ -197,32 +290,65 @@
       renderAlmanac(currentDate);
     }
 
-    function onDateSelected(val) {
-      if (!val) return;
-      currentDate = new Date(val);
-      renderAlmanac(currentDate);
-    }
-
     function renderAlmanac(dateObj) {
       if (typeof Solar === 'undefined') return;
 
+      const lang = typeof currentLang !== 'undefined' ? currentLang : 'zh-TW';
+      const t = PAGE_I18N[lang] || PAGE_I18N['zh-TW'];
+
+      // 套用 Lunar.js 原生多語系切換 API
+      if (typeof Lunar !== 'undefined' && typeof Lunar.setLanguage === 'function') {
+        Lunar.setLanguage(lang === 'en' ? 'en' : (lang === 'zh-CN' ? 'chs' : 'cht'));
+      }
+
+      // 替換 UI 按鈕與標題
+      document.getElementById('ui-label-hot').innerText = t.hotLabel;
+      document.getElementById('ui-btn-divination').innerText = t.btnDivination;
+      document.getElementById('ui-btn-jieqi').innerText = t.btnJieqi;
+      document.getElementById('ui-btn-prev').innerText = t.btnPrev;
+      document.getElementById('ui-btn-next').innerText = t.btnNext;
+      document.getElementById('ui-btn-today').innerText = t.btnToday;
+      document.getElementById('ui-badge-yi').innerText = t.badgeYi;
+      document.getElementById('ui-badge-ji').innerText = t.badgeJi;
+      document.getElementById('ui-title-yi').innerText = t.titleYi;
+      document.getElementById('ui-title-ji').innerText = t.titleJi;
+      document.getElementById('ui-title-gods').innerText = t.titleGods;
+      document.getElementById('ui-god-xi').innerText = t.godXi;
+      document.getElementById('ui-god-fu').innerText = t.godFu;
+      document.getElementById('ui-god-cai').innerText = t.godCai;
+      document.getElementById('ui-god-yang').innerText = t.godYang;
+      document.getElementById('ui-god-yin').innerText = t.godYin;
+      document.getElementById('ui-title-pengzu').innerText = t.titlePengzu;
+      document.getElementById('ui-title-hours').innerText = t.titleHours;
+
+      // 生成熱門選單按鈕
+      const hotBox = document.getElementById('ui-box-hot-btns');
+      hotBox.innerHTML = t.hotBtns.map(b => `<button type="button" class="kw-btn" onclick="quickSearch('${b.k}')">${b.t}</button>`).join('');
+
+      // 計算農曆
       const solar = Solar.fromDate(dateObj);
       const lunar = solar.getLunar();
 
-      const weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-      
-      document.getElementById('display-solar-year-month').innerText = `${solar.getYear()} 年 ${String(solar.getMonth()).padStart(2, '0')} 月`;
-      document.getElementById('display-week-day').innerText = weeks[dateObj.getDay()];
+      document.getElementById('display-solar-year-month').innerText = `${solar.getYear()} / ${String(solar.getMonth()).padStart(2, '0')}`;
+      document.getElementById('display-week-day').innerText = t.weeks[dateObj.getDay()];
       document.getElementById('display-big-day').innerText = solar.getDay();
-      document.getElementById('display-lunar-date').innerText = `農曆 ${lunar.getMonthInChinese()}月${lunar.getDayInChinese()} · 節氣【${lunar.getJieQi() || '無'}】`;
-      document.getElementById('display-ganzhi-year').innerText = `${lunar.getYearInGanZhi()}(${lunar.getYearShengXiao()})年 · ${lunar.getMonthInChinese()}月 · ${lunar.getDayInChinese()}`;
+      document.getElementById('display-lunar-date').innerText = `${t.lunarPrefix} ${lunar.getMonthInChinese()} / ${lunar.getDayInChinese()} · ${t.termPrefix}【${lunar.getJieQi() || '-'}】`;
+      document.getElementById('display-ganzhi-year').innerText = `${lunar.getYearInGanZhi()}(${lunar.getYearShengXiao()}) · ${lunar.getMonthInChinese()} · ${lunar.getDayInChinese()}`;
 
       document.getElementById('display-chong-sha').innerHTML = `<strong>⚡ 生肖沖煞：</strong> 沖${lunar.getChongDesc()}，煞${lunar.getSha()}方。`;
+
+      // 吉神方位轉換
+      const translatePos = (text) => (POS_I18N[lang] && POS_I18N[lang][text]) ? POS_I18N[lang][text] : text;
+      document.getElementById('pos-xi').innerText = translatePos('艮 (東北)');
+      document.getElementById('pos-fu').innerText = translatePos('巽 (東南)');
+      document.getElementById('pos-cai').innerText = translatePos('坤 (西南)');
+      document.getElementById('pos-yanggui').innerText = translatePos('坤 (西南)');
+      document.getElementById('pos-yingui').innerText = translatePos('坎 (正北)');
 
       renderTags('display-yi-tags', lunar.getDayYi(), true);
       renderTags('display-ji-tags', lunar.getDayJi(), false);
 
-      renderHoursStream();
+      renderHoursStream(t);
     }
 
     function renderTags(containerId, list, isYi) {
@@ -230,22 +356,30 @@
       if (!box) return;
       box.innerHTML = '';
 
+      const cLang = typeof currentLang !== 'undefined' ? currentLang : 'zh-TW';
+
       if (!list || list.length === 0) {
-        box.innerHTML = '<span class="empty-tag">諸事不宜 / 無特殊禁忌</span>';
+        const emptyMsg = cLang === 'en' ? 'No Special Taboos' : (cLang === 'zh-CN' ? '诸事不宜 / 无特殊禁忌' : '諸事不宜 / 無傳統禁忌');
+        box.innerHTML = `<span class="empty-tag">${emptyMsg}</span>`;
         return;
       }
 
       list.forEach(item => {
+        let displayItem = item;
+        if (TAG_I18N[cLang] && TAG_I18N[cLang][item]) {
+          displayItem = TAG_I18N[cLang][item];
+        }
+
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = `tag-badge ${isYi ? 'yi' : 'ji'}`;
-        btn.innerHTML = `${item} ℹ️`;
+        btn.innerHTML = `${displayItem} ℹ️`;
         btn.onclick = () => openModal(item);
         box.appendChild(btn);
       });
     }
 
-    function renderHoursStream() {
+    function renderHoursStream(t) {
       const stream = document.getElementById('display-hours-stream');
       if (!stream) return;
       stream.innerHTML = '';
@@ -264,7 +398,7 @@
         div.innerHTML = `
           <div class="hour-title">${item.t}</div>
           <div class="hour-range">${item.h}</div>
-          <div class="hour-status">${isLucky ? '吉' : '凶'}</div>
+          <div class="hour-status">${isLucky ? t.lucky : t.unlucky}</div>
         `;
         stream.appendChild(div);
       });
@@ -275,12 +409,15 @@
         alert('您的瀏覽器不支援語音朗讀。');
         return;
       }
-      const text = document.getElementById('display-solar-year-month').innerText + ' ' +
-                   document.getElementById('display-big-day').innerText + '號，' +
-                   document.getElementById('display-lunar-date').innerText + '。' +
-                   document.getElementById('display-chong-sha').innerText;
+      const solarText = document.getElementById('display-solar-year-month')?.innerText || '';
+      const dayText = document.getElementById('display-big-day')?.innerText || '';
+      const lunarText = document.getElementById('display-lunar-date')?.innerText || '';
+      const chongShaText = document.getElementById('display-chong-sha')?.innerText || '';
+
+      const text = `${solarText} ${dayText}號，${lunarText}。${chongShaText}`;
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'zh-TW';
+      const cLang = typeof currentLang !== 'undefined' ? currentLang : 'zh-TW';
+      u.lang = cLang === 'en' ? 'en-US' : (cLang === 'zh-CN' ? 'zh-CN' : 'zh-TW');
       window.speechSynthesis.speak(u);
     }
   </script>

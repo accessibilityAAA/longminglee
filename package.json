@@ -1,0 +1,10 @@
+{
+  "name": "longminglee-ssg",
+  "version": "1.0.0",
+  "description": "新式農民曆 Programmatic SEO 靜態網站生成器",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {}
+}
